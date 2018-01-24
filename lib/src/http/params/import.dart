@@ -1,17 +1,17 @@
 /// Provides parsing path and query parameters
 library jaguar.src.http.params;
 
-import 'dart:mirrors';
 import 'package:collection/collection.dart' show DelegatingMap;
 
 import 'package:jaguar/src/utils/string/import.dart';
 
+/// A [Map] whose keys can be accessed as if they are members of the object
 @proxy
 class DottableMap<V> extends DelegatingMap<String, V> {
   DottableMap(Map<String, V> map) : super(map);
 
   ///Retrieve a value from this map
-  V getField(String key, [V defaultValue]) {
+  V get(String key, [V defaultValue]) {
     if (!containsKey(key)) {
       return defaultValue;
     }
@@ -19,10 +19,11 @@ class DottableMap<V> extends DelegatingMap<String, V> {
     return this[key];
   }
 
+  /* Reimplement it without Mirrors
   dynamic noSuchMethod(Invocation invocation) {
-    var key = MirrorSystem.getName(invocation.memberName);
+    var key = invocation.memberName;
     if (invocation.isGetter) {
-      return getField(key);
+      return get(key);
     } else if (invocation.isSetter) {
       this[key.substring(0, key.length - 1)] =
           invocation.positionalArguments.first as V;
@@ -31,13 +32,14 @@ class DottableMap<V> extends DelegatingMap<String, V> {
       return super.noSuchMethod(invocation);
     }
   }
+  */
 }
 
 class DynamicDottableMap extends DottableMap<dynamic> {
   DynamicDottableMap(Map<String, dynamic> map) : super(map);
 
   ///Retrieve a value from this map
-  int getFieldAsInt(String key, [int defaultValue]) {
+  int getInt(String key, [int defaultValue]) {
     if (!containsKey(key)) {
       return defaultValue;
     }
@@ -56,7 +58,7 @@ class DynamicDottableMap extends DottableMap<dynamic> {
   }
 
   ///Retrieve a value from this map
-  double getFieldAsDouble(String key, [double defaultValue]) {
+  double getDouble(String key, [double defaultValue]) {
     if (!containsKey(key)) {
       return defaultValue;
     }
@@ -75,7 +77,7 @@ class DynamicDottableMap extends DottableMap<dynamic> {
   }
 
   ///Retrieve a value from this map
-  num getFieldAsNum(String key, [num defaultValue]) {
+  num getNum(String key, [num defaultValue]) {
     if (!containsKey(key)) {
       return defaultValue;
     }
@@ -94,7 +96,7 @@ class DynamicDottableMap extends DottableMap<dynamic> {
   }
 
   ///Retrieve a value from this map
-  bool getFieldAsBool(String key, [bool defaultValue]) {
+  bool getBool(String key, [bool defaultValue]) {
     if (!containsKey(key)) {
       return defaultValue;
     }
@@ -113,6 +115,7 @@ class DynamicDottableMap extends DottableMap<dynamic> {
   }
 }
 
+/// Class to hold path parameters
 class PathParams extends DynamicDottableMap {
   PathParams([Map<String, dynamic> map]) : super({}) {
     if (map is Map) {
@@ -123,6 +126,8 @@ class PathParams extends DynamicDottableMap {
   PathParams.FromPathParam(PathParams param) : super(param);
 }
 
+/// Class to hold query parameters
+/// @proxy
 class QueryParams extends DynamicDottableMap {
   QueryParams(Map<String, dynamic> map) : super(map);
 

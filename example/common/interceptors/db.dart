@@ -13,18 +13,6 @@ class MongoDbState {
   MongoDbState();
 }
 
-class WrapMongoDb implements RouteWrapper<MongoDb> {
-  final String dbName;
-
-  final String id;
-
-  final Map<Symbol, MakeParam> makeParams = const {};
-
-  const WrapMongoDb({this.dbName, this.id});
-
-  MongoDb createInterceptor() => new MongoDb(this.dbName);
-}
-
 class MongoDb extends Interceptor {
   final String dbName;
 
@@ -32,12 +20,12 @@ class MongoDb extends Interceptor {
 
   MongoDb(this.dbName);
 
-  Future<Db> pre() async {
+  Future<Db> pre(Context ctx) async {
     state.db = new Db();
     return state.db;
   }
 
-  Future<Null> post() async {
+  Future<Null> post(Context ctx, Response resp) async {
     await state.db.close();
   }
 }

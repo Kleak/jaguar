@@ -1,17 +1,16 @@
 library test.response.stream;
 
-import 'dart:io';
 import 'dart:async';
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:jaguar/jaguar.dart';
-import 'package:jaguar/testing.dart';
 
 part 'stream.g.dart';
 
 @Api(path: '/api')
-class ExampleApi extends Object with _$JaguarExampleApi {
+class ExampleApi extends _$JaguarExampleApi {
   @Get(path: '/stream')
-  Stream<List<int>> getStream() {
+  Stream<List<int>> getStream(Context ctx) {
     StreamController<List<int>> streamCon = new StreamController<List<int>>();
 
     new Timer(new Duration(seconds: 5), () {
@@ -26,22 +25,22 @@ class ExampleApi extends Object with _$JaguarExampleApi {
 
 void main() {
   group('route', () {
-    JaguarMock mock;
-    setUp(() {
-      Configuration config = new Configuration();
-      config.addApi(new ExampleApi());
-      mock = new JaguarMock(config);
+    Jaguar server;
+    setUpAll(() async {
+      server = new Jaguar(port: 8000);
+      server.addApi(new ExampleApi());
+      await server.serve();
     });
 
-    tearDown(() {});
+    tearDownAll(() async {
+      await server.close();
+    });
 
     test('stream', () async {
-      Uri uri = new Uri.http('localhost:8080', '/api/stream');
-      MockHttpRequest rq = new MockHttpRequest(uri);
-      MockHttpResponse response = await mock.handleRequest(rq);
+      Uri uri = new Uri.http('localhost:8000', '/api/stream');
+      http.Response response = await http.get(uri);
 
-      expect(response.mockContentBinary, equals([1, 2, 3, 4, 5, 6, 7, 8]));
-      expect(response.headers.toMap, {});
+      expect(response.body, '\x01\x02\x03\x04\x05\x06\x07\b');
       expect(response.statusCode, 200);
     });
   });

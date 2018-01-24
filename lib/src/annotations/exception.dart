@@ -1,9 +1,9 @@
 part of jaguar.src.annotations;
 
-typedef dynamic ExceptionHandlerFunc(
-    HttpRequest request, dynamic e, StackTrace trace);
+/// Exception handler class that handles exception in route chain
+abstract class ExceptionHandler {
+  const ExceptionHandler();
 
-abstract class ExceptionHandler<ExceptionType> {
-  dynamic onRouteException(
-      HttpRequest request, ExceptionType e, StackTrace trace);
+  /// Method that is called when there is an exception in route chain
+  FutureOr<Response> onRouteException(Context ctx, e, StackTrace trace);
 }

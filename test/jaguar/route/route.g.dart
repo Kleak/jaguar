@@ -4,159 +4,73 @@ part of test.jaguar.route;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class ExampleApi
 // **************************************************************************
 
 abstract class _$JaguarExampleApi implements RequestHandler {
   static const List<RouteBase> routes = const <RouteBase>[
     const Route(path: '/user', methods: const <String>['GET']),
-    const Route(
-        path: '/statuscode', methods: const <String>['GET'], statusCode: 201),
-    const Route(path: '/paramandquery/:param', methods: const <String>['GET']),
-    const Route(path: '/input/header', methods: const <String>['GET']),
-    const Route(path: '/input/headers', methods: const <String>['GET']),
-    const Route(path: '/input/cookie', methods: const <String>['GET']),
-    const Route(path: '/input/cookies', methods: const <String>['GET'])
+    const Get(path: '/statuscode', statusCode: 201),
+    const Get(path: '/paramandquery/:param'),
+    const Get(path: '/input/header'),
+    const Get(path: '/input/headers'),
+    const Get(path: '/input/cookie'),
+    const Get(path: '/input/cookies')
   ];
 
-  String getUser();
+  String getUser(Context ctx);
+  String statusCode(Context ctx);
+  String paramAndQuery(Context ctx);
+  String inputHeader(Context ctx);
+  String inputHeaders(Context ctx);
+  String inputCookie(Context ctx);
+  String inputCookies(Context ctx);
 
-  String statusCode();
-
-  String paramAndQuery(String param, {String query});
-
-  String inputHeader(String user);
-
-  String inputHeaders(HttpHeaders headers);
-
-  String inputCookie(String user);
-
-  String inputCookies(List<Cookie> cookies);
-
-  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api';
-    PathParams pathParams = new PathParams();
     bool match = false;
-    QueryParams queryParams = new QueryParams(request.uri.queryParameters);
 
 //Handler for getUser
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.value = getUser();
-        await rRouteResponse0.writeResponse(request.response);
-      } catch (e) {
-        rethrow;
-      }
-      return true;
+      return await Interceptor.chain(ctx, getUser, routes[0]);
     }
 
 //Handler for statusCode
-    match =
-        routes[1].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[1].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 201;
-        rRouteResponse0.value = statusCode();
-        await rRouteResponse0.writeResponse(request.response);
-      } catch (e) {
-        rethrow;
-      }
-      return true;
+      return await Interceptor.chain(ctx, statusCode, routes[1]);
     }
 
 //Handler for paramAndQuery
-    match =
-        routes[2].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[2].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.value = paramAndQuery(
-          (pathParams.getField('param')),
-          query: (queryParams.getField('query')),
-        );
-        await rRouteResponse0.writeResponse(request.response);
-      } catch (e) {
-        rethrow;
-      }
-      return true;
+      return await Interceptor.chain(ctx, paramAndQuery, routes[2]);
     }
 
 //Handler for inputHeader
-    match =
-        routes[3].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[3].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.value = inputHeader(
-          request.headers.value('user'),
-        );
-        await rRouteResponse0.writeResponse(request.response);
-      } catch (e) {
-        rethrow;
-      }
-      return true;
+      return await Interceptor.chain(ctx, inputHeader, routes[3]);
     }
 
 //Handler for inputHeaders
-    match =
-        routes[4].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[4].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.value = inputHeaders(
-          request.headers,
-        );
-        await rRouteResponse0.writeResponse(request.response);
-      } catch (e) {
-        rethrow;
-      }
-      return true;
+      return await Interceptor.chain(ctx, inputHeaders, routes[4]);
     }
 
 //Handler for inputCookie
-    match =
-        routes[5].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[5].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.value = inputCookie(
-          request.cookies
-              .firstWhere((cookie) => cookie.name == 'user', orElse: () => null)
-              ?.value,
-        );
-        await rRouteResponse0.writeResponse(request.response);
-      } catch (e) {
-        rethrow;
-      }
-      return true;
+      return await Interceptor.chain(ctx, inputCookie, routes[5]);
     }
 
 //Handler for inputCookies
-    match =
-        routes[6].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[6].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      Response<String> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.value = inputCookies(
-          request.cookies,
-        );
-        await rRouteResponse0.writeResponse(request.response);
-      } catch (e) {
-        rethrow;
-      }
-      return true;
+      return await Interceptor.chain(ctx, inputCookies, routes[6]);
     }
 
-    return false;
+    return null;
   }
 }

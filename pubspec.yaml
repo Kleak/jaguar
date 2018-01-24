@@ -1,28 +1,36 @@
 name: jaguar
-version: 0.1.14
-description: jaguar is a performant server side framework
+version: 1.2.6
+description: Jaguar is a production ready HTTP server framework built for speed, simplicity and extensiblity
 authors:
 - Ravi Teja Gudapati <tejainece@gmail.com>
 - Kevin Segaud <segaud.kevin@gmail.com>
 homepage: http://jaguar-dart.github.io
 
-environment:
-  sdk: ">=1.8.0 <2.0.0"
+documentation:
 
-executables:
-  jaguar:
+environment:
+  sdk: ">=1.8.0 <2.1.0"
 
 dependencies:
   yaml: ^2.1.12
-  args: ">=0.13.7 <0.14.0"
+  args: ">=0.13.7 <1.3.0"
   http_server: ">=0.9.6 <0.10.0"
   mime: ">=0.9.3 <0.10.0"
   logging: ">=0.11.3 <0.12.0"
-  intl: ">=0.14.0 <0.15.0"
-  jaguar_generator: ">=0.1.14 <0.2.0"
-#    path: ../jaguar_generator
-#    git: https://github.com/Jaguar-dart/jaguar_generator.git
+  intl: ">=0.15.0 <0.16.0"
+  stack_trace: '>=1.7.0 <2.0.0'
+  quiver_hashcode: '>=1.0.0 <2.0.0'
+  collection: ">=1.14.1 <2.0.0"
+  crypto: ^2.0.2
+  meta: ">=1.0.2 <1.2.0"
+  path: ">=0.9.0 <2.0.0"
 
 dev_dependencies:
+  jaguar_reflect: ^1.2.1
   cookies:
-  test: 0.12.15+10
+  test: ^0.12.15+10
+  http:
+  jaguar_client: ^0.2.1
+  dice: ^1.7.0
+  jaguar_generator: ^1.2.3
+  build_runner: ^0.7.0

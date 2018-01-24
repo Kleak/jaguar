@@ -1,55 +1,28 @@
+/// Annotations
 library jaguar.src.annotations;
 
 import 'dart:async';
-import 'dart:io';
 
-import '../serve/import.dart';
+import 'package:jaguar/jaguar.dart';
 
-part 'routes.dart';
-part 'interceptors.dart';
-part 'inputs.dart';
-part 'websocket.dart';
 part 'exception.dart';
+part 'interceptors.dart';
+part 'routes.dart';
 
-///An annotation to define an API class
+/// Annotates a class that it is an API class that contains route handlers
 class Api {
-  final String path;
-  final String version;
-
-  const Api({this.path: '', this.version: ''});
-
-  String get url {
-    String prefix = "";
-    if (path != null && path.isNotEmpty) {
-      prefix += path;
-    }
-    if (version != null && version.isNotEmpty) {
-      prefix += version;
-    }
-
-    return prefix;
-  }
-}
-
-class RouteGroup {
+  /// Path prefix of the child routes and included APIs in the API class
   final String path;
 
-  const RouteGroup({this.path: ''});
+  final bool isRoot;
+
+  const Api({this.path: '', this.isRoot: false});
 }
 
-///An annotation to define an API group in API class
-class Group {
-  ///Path prefix to the group
+/// Includes the route handlers into the parent API class
+class IncludeApi {
+  ///Path prefix for the route handlers of the Included API
   final String path;
 
-  const Group({this.path: ''});
-}
-
-/// JaguarFile represents a file. The route handlers and interceptors can return
-/// this type to return a filename instead of returning Strings.
-class JaguarFile {
-  /// Path of the file
-  final String filePath;
-
-  const JaguarFile(this.filePath);
+  const IncludeApi({this.path: ''});
 }

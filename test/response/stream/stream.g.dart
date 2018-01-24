@@ -4,7 +4,6 @@ part of test.response.stream;
 
 // **************************************************************************
 // Generator: ApiGenerator
-// Target: class ExampleApi
 // **************************************************************************
 
 abstract class _$JaguarExampleApi implements RequestHandler {
@@ -12,28 +11,18 @@ abstract class _$JaguarExampleApi implements RequestHandler {
     const Get(path: '/stream')
   ];
 
-  Stream<List<int>> getStream();
+  Stream<List<int>> getStream(Context ctx);
 
-  Future<bool> handleRequest(HttpRequest request, {String prefix: ''}) async {
+  Future<Response> handleRequest(Context ctx, {String prefix: ''}) async {
     prefix += '/api';
-    PathParams pathParams = new PathParams();
     bool match = false;
 
 //Handler for getStream
-    match =
-        routes[0].match(request.uri.path, request.method, prefix, pathParams);
+    match = routes[0].match(ctx.path, ctx.method, prefix, ctx.pathParams);
     if (match) {
-      Response<Stream> rRouteResponse0 = new Response(null);
-      try {
-        rRouteResponse0.statusCode = 200;
-        rRouteResponse0.value = getStream();
-        await rRouteResponse0.writeResponse(request.response);
-      } catch (e) {
-        rethrow;
-      }
-      return true;
+      return await Interceptor.chain(ctx, getStream, routes[0]);
     }
 
-    return false;
+    return null;
   }
 }

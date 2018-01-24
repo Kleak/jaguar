@@ -1,7 +1,6 @@
 library jwt_auth.example.models;
 
 import 'dart:convert';
-import 'package:jaguar/jaguar.dart';
 
 /// Model for Book
 class Book {
@@ -9,8 +8,17 @@ class Book {
 
   Book.make(this.id, this.name, this.authors);
 
-  Book.FromQueryParam(QueryParams params) {
-    fromMap({'name': params.name, 'authors': params.authors});
+  Book.fromMap(Map map) {
+    if (map['name'] is String) {
+      name = map['name'];
+    }
+
+    if (map['authors'] is List) {
+      List<String> value = map['authors'] as List<String>;
+      if (value.every((el) => el is String)) {
+        authors = value;
+      }
+    }
   }
 
   /// Id of the book
@@ -31,30 +39,6 @@ class Book {
   // Converts to JSON
   String toJson() {
     return JSON.encode(toMap());
-  }
-
-  /// Builds from JSON
-  void fromJson(String json) {
-    dynamic map = JSON.decode(json);
-
-    if (map is Map) {
-      fromMap(map);
-    }
-  }
-
-  /// Builds from Map
-  void fromMap(Map map) {
-    if (map['name'] is String) {
-      name = map['name'];
-    }
-
-    if (map['authors'] is List) {
-      List<String> value = map['authors'] as List<String>;
-
-      if (value.every((el) => el is String)) {
-        authors = value;
-      }
-    }
   }
 
   void validate() {
